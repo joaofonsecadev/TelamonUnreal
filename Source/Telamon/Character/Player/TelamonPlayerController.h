@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "TelamonPlayerController.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogTelamonPlayerController, Warning, All);
+
 /**
  * 
  */
@@ -13,15 +15,5 @@ UCLASS()
 class TELAMON_API ATelamonPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
-protected:
-	virtual void SetupInputComponent() override;
-
-private:
-	void JumpInput();
-	void StopJumpInput();
-	void ForwardInput(const float Value);
-	void SideInput(const float Value);
-	void YawInput(const float Value);
-	void PitchInput(const float Value);
+	
 };
