@@ -14,22 +14,6 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTelamonPlayerCharacter, Warning, All);
 
-USTRUCT()
-struct FInputActions
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly)
-	UInputAction* FootMove = nullptr;
-
-	UPROPERTY(EditDefaultsOnly)
-	UInputAction* CameraControl = nullptr;
-
-	UPROPERTY(EditDefaultsOnly)
-	UInputAction* Jump = nullptr;
-	
-};
-
 UCLASS(config=Game)
 class ATelamonPlayerCharacter : public ACharacter
 {
@@ -51,10 +35,7 @@ private:
 	void CameraControl(const FInputActionValue& Value);
 
 public:
-	// Temporary until a cleaner solution is made
-	UPROPERTY(EditDefaultsOnly, Category = "Input Setup")
-	FInputActions m_InputActions;
-
+	//@TODO Temporary until a cleaner solution is made
 	UPROPERTY(EditDefaultsOnly, Category = "Input Setup")
 	UInputMappingContext* m_InputMappingContext;
 

@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "TelamonPlayerController.h"
+#include "Telamon/Core/DataTableSubsystem.h"
 
 
 DEFINE_LOG_CATEGORY(LogTelamonPlayerCharacter);
@@ -82,11 +83,18 @@ void ATelamonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		return;
 	}
 
-	EnhancedInputComponent->BindAction(m_InputActions.FootMove, ETriggerEvent::Triggered, this, &ATelamonPlayerCharacter::Movement);
-	EnhancedInputComponent->BindAction(m_InputActions.CameraControl, ETriggerEvent::Triggered, this, &ATelamonPlayerCharacter::CameraControl);
+	//@TODO Refactor into InputSystemUtils::GetInputAction(TEXT("FootMove"))
+	const UDataTableSubsystem* const DataTables = GetWorld()->GetSubsystem<UDataTableSubsystem>();
+	const UDataTable* InputActionTable = DataTables->GetInputActionTable();
+	const UInputAction* FootMove = InputActionTable->FindRow<FInputActionDataRow>(TEXT("FootMove"), TEXT("SetupPlayerInputComponent"))->InputAction;
+	const UInputAction* CameraControl = InputActionTable->FindRow<FInputActionDataRow>(TEXT("CameraControl"), TEXT("SetupPlayerInputComponent"))->InputAction;
+	const UInputAction* Jump = InputActionTable->FindRow<FInputActionDataRow>(TEXT("Jump"), TEXT("SetupPlayerInputComponent"))->InputAction;
 
-	EnhancedInputComponent->BindAction(m_InputActions.Jump, ETriggerEvent::Started, this, &ACharacter::Jump);
-	EnhancedInputComponent->BindAction(m_InputActions.Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	EnhancedInputComponent->BindAction(FootMove, ETriggerEvent::Triggered, this, &ATelamonPlayerCharacter::Movement);
+	EnhancedInputComponent->BindAction(CameraControl, ETriggerEvent::Triggered, this, &ATelamonPlayerCharacter::CameraControl);
+
+	EnhancedInputComponent->BindAction(Jump, ETriggerEvent::Started, this, &ACharacter::Jump);
+	EnhancedInputComponent->BindAction(Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 }
 
 void ATelamonPlayerCharacter::Movement(const FInputActionValue& Value)
